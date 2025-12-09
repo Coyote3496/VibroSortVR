@@ -45,4 +45,13 @@ public class HapticInteractable : MonoBehaviour
     public bool GetIsLoopable() {
         return isLoopableHaptic;
     }
+    public void ReplayCurrentVibration(HapticsManager hM, OVRInput.Controller controller)
+    {
+        hM.RightHapticsBuffer_amp = hapticBuffer_amp;
+        hM.RightHapticsBuffer_freq = hapticBuffer_freq;
+
+        hM.rightHapticLoop = false;
+        hM.rightHapticStartTime = Time.time;
+    }
 }
+

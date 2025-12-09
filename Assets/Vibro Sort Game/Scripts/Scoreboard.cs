@@ -7,8 +7,8 @@ using System;
 public class Scoreboard : MonoBehaviour
 {
 
-    private int numObjectsToSort = 20;
-    private int numObjectsLeft = 20;
+    private int numObjectsToSort = 12;
+    private int numObjectsLeft = 12;
 
     public int correctScore = 0;
 
@@ -26,7 +26,7 @@ public class Scoreboard : MonoBehaviour
 
     public ObjectGenerator objGen;
 
-    public bool debugWithoutLightsout = false;
+    public bool debugWithoutLightsout = true;
 
     public GameObject startPanel;
 

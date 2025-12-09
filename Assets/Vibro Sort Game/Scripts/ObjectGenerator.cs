@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-
 public enum ObjectCategory {
     Concrete,
     Squishy,
@@ -14,67 +13,117 @@ public enum ObjectCategory {
 
 public class ObjectGenerator : MonoBehaviour
 {
-    public int numObjsToSpawn = 20;
-    public int minPerCat = 2;
+    [System.Serializable]
+    public class VibroPattern
+    {
+        public float[] amp;
+        public float[] freq;
+
+        public VibroPattern(float[] a, float[] f)
+        {
+            amp = a;
+            freq = f;
+        }
+    }
+
+    private VibroPattern[] binPatterns;
+    private Dictionary<ObjectCategory, int> categoryToBinPosition =
+        new Dictionary<ObjectCategory, int>();
+
+    public int numObjsToSpawn = 12;
+    public int minPerCat = 1;
 
     public Scoreboard scoreboard;
-    private int leftToSpawn;
 
-    public Material[] categoryMaterials;
-
-    public GameObject[] bins;
-    public GameObject[] objectPrefabs;
+    public Material[] categoryMaterials; 
+    public GameObject[] bins;     
+    public GameObject[] objectPrefabs;   
 
     private Collider spawnCollider;
 
-
-    // Start is called before the first frame update
     void Start()
     {
-        spawnCollider = this.GetComponent<Collider>();
+        spawnCollider = GetComponent<Collider>();
+        binPatterns = new VibroPattern[]
+        {
+            new VibroPattern( new float[]{ 0.8f, 0.0f },                   new float[]{ 0.5f, 0.0f } ),
+            new VibroPattern( new float[]{ 0.8f, 0.0f, 0.8f, 0.0f },             new float[]{ 0.5f, 0.5f, 0.0f } ),
+            new VibroPattern( new float[]{ 0.8f, 0.8f, 0.8f, 0.0f },        new float[]{ 0.5f, 0.5f, 0.5f, 0.0f } ),
+            new VibroPattern( new float[]{0.3f,0.1f,0.3f,0.1f,0.0f},   new float[]{0.3f,0.1f,0.3f,0.1f,0.0f} ),
+            new VibroPattern( new float[]{0.9f,0.9f,0.3f,0.9f,0.0f},   new float[]{1.0f,0.7f,0.2f,1.0f,0.0f} )
+        };
     }
-
-    public void AssignBins() {
-        System.Random random = new System.Random();
-        GameObject[] shuffledBins = bins.OrderBy(x => random.Next()).ToArray();
-        for (int i = 0; i < shuffledBins.Length; i++) {
-            shuffledBins[i].GetComponent<Renderer>().material = categoryMaterials[i];
-            shuffledBins[i].transform.GetChild(0).GetComponent<BinCheck>().binCategory = (ObjectCategory)i;
-        }
-    }
-
-    public void InstantiateObjects() {
-        scoreboard.SetNumObjectsToSort(numObjsToSpawn);
-        leftToSpawn = numObjsToSpawn;
-
-        // Assures
-        for (int i = 0; i < minPerCat; i++) {
-            foreach (ObjectCategory oCat in (ObjectCategory[]) System.Enum.GetValues(typeof(ObjectCategory))) {
-                leftToSpawn -= 1;
-                Quaternion randomStartRot = Quaternion.Euler(Random.Range(0.0f, 360.0f), Random.Range(0.0f, 360.0f), Random.Range(0.0f, 360.0f));
-                Vector3 randomStartPos = RandomPointInBounds(spawnCollider.bounds);
-                GameObject currObj = Instantiate(objectPrefabs[(int)oCat], randomStartPos, randomStartRot);
-            }
-        }
-        while (leftToSpawn > 0) {
-            leftToSpawn -= 1;
-            Quaternion randomStartRot = Quaternion.Euler(Random.Range(0.0f, 360.0f), Random.Range(0.0f, 360.0f), Random.Range(0.0f, 360.0f));
-            Vector3 randomStartPos = RandomPointInBounds(spawnCollider.bounds);
-            GameObject currObj = Instantiate(objectPrefabs[Random.Range(0,4)], randomStartPos, randomStartRot);
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
+    public void AssignBins()
     {
-        
+        categoryToBinPosition.Clear();
+
+        // Randomized order of categories (colors)
+        List<ObjectCategory> randomizedCategories =
+            System.Enum.GetValues(typeof(ObjectCategory))
+            .Cast<ObjectCategory>()
+            .OrderBy(c => Random.value)
+            .ToList();
+
+        for (int pos = 0; pos < bins.Length; pos++)
+        {
+            ObjectCategory assignedCategory = randomizedCategories[pos];
+            bins[pos].GetComponent<Renderer>().material =
+                categoryMaterials[(int)assignedCategory];
+
+            BinCheck bc = bins[pos].transform.GetChild(0).GetComponent<BinCheck>();
+            bc.binCategory = assignedCategory;
+
+            categoryToBinPosition[assignedCategory] = pos;
+        }
+    }
+    public void InstantiateObjects()
+    {
+        scoreboard.SetNumObjectsToSort(numObjsToSpawn);
+        int left = numObjsToSpawn;
+
+        foreach (ObjectCategory category in System.Enum.GetValues(typeof(ObjectCategory)))
+        {
+            SpawnObject(category);
+            left--;
+        }
+
+        while (left > 0)
+        {
+            ObjectCategory cat = (ObjectCategory)Random.Range(0, 5);
+            SpawnObject(cat);
+            left--;
+        }
     }
 
-    public static Vector3 RandomPointInBounds(Bounds bounds) {
+    private void SpawnObject(ObjectCategory cat)
+    {
+        Quaternion rot = Quaternion.Euler(
+            Random.Range(0f,360f),
+            Random.Range(0f,360f),
+            Random.Range(0f,360f));
+
+        Vector3 pos = RandomPointInBounds(spawnCollider.bounds);
+
+        GameObject obj = Instantiate(objectPrefabs[(int)cat], pos, rot);
+
+        SortInteractable si = obj.GetComponent<SortInteractable>();
+        si.objectCategory = cat;
+
+        int binPosition = categoryToBinPosition[cat];
+
+        VibroPattern pattern = binPatterns[binPosition];
+
+        HapticInteractable hi = obj.GetComponent<HapticInteractable>();
+        hi.hapticBuffer_amp = pattern.amp;
+        hi.hapticBuffer_freq = pattern.freq;
+    }
+
+    public static Vector3 RandomPointInBounds(Bounds b)
+    {
         return new Vector3(
-            Random.Range(bounds.min.x, bounds.max.x),
-            Random.Range(bounds.min.y, bounds.max.y),
-            Random.Range(bounds.min.z, bounds.max.z)
+            Random.Range(b.min.x, b.max.x),
+            Random.Range(b.min.y, b.max.y),
+            Random.Range(b.min.z, b.max.z)
         );
     }
 }

@@ -8,7 +8,7 @@ public class HapticsManager : MonoBehaviour
     // Start is called before the first frame update
 
     public TextMeshProUGUI debugText;
-    private int hapticFrameMilli = 100; // Each frame is 50 milliseconds.
+    private int hapticFrameMilli = 100;
 
     private float[] leftHapticsBuffer_amp;
     public float[] LeftHapticsBuffer_amp {

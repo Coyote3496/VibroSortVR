@@ -112,7 +112,7 @@ public class SoundFX {
 	[Tooltip( "List of the audio clips assigned to this sound FX")]
 	public AudioClip[]		soundClips = new AudioClip[1];
 	// editor only - unfortunately if we set it not to serialize, we can't query it from the editor
-	public bool             visibilityToggle = false;
+	public bool             visibilityToggle = true;
 	// runtime vars
 	[System.NonSerialized]
 	private SoundGroup      soundGroup = null;
