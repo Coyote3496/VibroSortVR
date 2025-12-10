@@ -4572,7 +4572,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32
   objGen: {fileID: 1791787963}
-  debugWithoutLightsout: 0
+  debugWithoutLightsout: 1
   startPanel: {fileID: 2193110244841005536}
 --- !u!1 &1761419238
 GameObject:
