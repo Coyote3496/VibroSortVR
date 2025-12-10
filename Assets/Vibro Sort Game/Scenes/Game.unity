@@ -3098,6 +3098,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d952c175ec3c6554199fd744548ce50a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1021781393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1021781394}
+  - component: {fileID: 1021781395}
+  - component: {fileID: 1021781396}
+  m_Layer: 0
+  m_Name: WarnBorder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1021781394
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021781393}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.002, y: 0.144, z: 0.026}
+  m_LocalScale: {x: 1.8, y: 0.2, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1593829174}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1021781395
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021781393}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1021781396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021781393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eea086283561d4c9ab83e4ac9a187024, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hM: {fileID: 241988808}
+  controller: 2
 --- !u!1 &1032156944
 GameObject:
   m_ObjectHideFlags: 0
@@ -4098,6 +4158,7 @@ Transform:
   - {fileID: 1600027687}
   - {fileID: 586545632}
   - {fileID: 2038444904}
+  - {fileID: 1021781394}
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: -10.101, y: 0, z: 0}
@@ -4511,7 +4572,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32
   objGen: {fileID: 1791787963}
-  debugWithoutLightsout: 1
+  debugWithoutLightsout: 0
   startPanel: {fileID: 2193110244841005536}
 --- !u!1 &1761419238
 GameObject:
@@ -4625,7 +4686,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b441275dfb596da4f8b981f8a3b9ba21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numObjsToSpawn: 12
+  numObjsToSpawn: 6
   minPerCat: 1
   scoreboard: {fileID: 1706502405}
   categoryMaterials:

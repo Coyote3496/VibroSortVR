@@ -48,7 +48,7 @@ public class ObjectGenerator : MonoBehaviour
         {
             new VibroPattern( new float[]{ 0.8f, 0.0f },                   new float[]{ 0.5f, 0.0f } ),
             new VibroPattern( new float[]{ 0.8f, 0.0f, 0.8f, 0.0f },             new float[]{ 0.5f, 0.5f, 0.0f } ),
-            new VibroPattern( new float[]{ 0.8f, 0.8f, 0.8f, 0.0f },        new float[]{ 0.5f, 0.5f, 0.5f, 0.0f } ),
+            new VibroPattern( new float[]{ 0.8f, 0.4f, 0.8f, 0.4f },        new float[]{ 0.5f, 0.5f, 0.5f, 0.0f } ),
             new VibroPattern( new float[]{0.3f,0.1f,0.3f,0.1f,0.0f},   new float[]{0.3f,0.1f,0.3f,0.1f,0.0f} ),
             new VibroPattern( new float[]{0.9f,0.9f,0.3f,0.9f,0.0f},   new float[]{1.0f,0.7f,0.2f,1.0f,0.0f} )
         };
@@ -57,12 +57,8 @@ public class ObjectGenerator : MonoBehaviour
     {
         categoryToBinPosition.Clear();
 
-        // Randomized order of categories (colors)
         List<ObjectCategory> randomizedCategories =
-            System.Enum.GetValues(typeof(ObjectCategory))
-            .Cast<ObjectCategory>()
-            .OrderBy(c => Random.value)
-            .ToList();
+            System.Enum.GetValues(typeof(ObjectCategory)).Cast<ObjectCategory>().OrderBy(c => Random.value).ToList();
 
         for (int pos = 0; pos < bins.Length; pos++)
         {
